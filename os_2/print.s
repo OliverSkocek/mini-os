@@ -13,5 +13,10 @@ inc	BX
 jmp	loop
 
 print_end:
+mov 	AL, 0x0A
+int	0x10
+mov	AL, 0x0D
+int 	0x10
+
 popa
 ret
