@@ -10,5 +10,7 @@ _start:
 #end code
 end:
 jmp	end
+#data goes here
+
 .fill 510-(.-_start)
 .word 0x55AA
