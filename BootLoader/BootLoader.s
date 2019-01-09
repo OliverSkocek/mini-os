@@ -23,10 +23,47 @@ mov     CR0, EAX
 #end code
 end:
 jmp	end
+
 #data goes here
-gdt_descriptor:
-                                            #TODO
 boot_string:
 .string "Bootloader is starting..."
+
+gdt_descriptor:
+.word gdt_end - gdt_start - 1
+.
+
+
+gdt_start:
+    NULL_Descriptor:
+        .word 0x0000
+        .word 0x0000
+        .word 0x0000
+        .word 0x0000
+    CODE:
+        .word 0011110100001000b
+        .word 0x0000
+        .byte 0x00
+        .byte 10011010b
+        .byte 11000000b
+        .byte 0x00
+    DATA:
+        .word 0011110100001000b
+        .word 1001000000000000b
+        .byte 11010000b
+        .byte 10010010b
+        .byte 11000000b
+        .byte 00000011b
+    HEAP:
+        .word 0011110100001000b
+        .word 0010000000000000b
+        .byte 10100001b
+        .byte 10010010b
+        .byte 11000000b
+        .byte 00000111b
+gdt_end:
+
+
+#00000011110100001001000000000000b
+0000b 0011110100001000b
 .fill 510-(.-_start)
 .word 0x55AA
