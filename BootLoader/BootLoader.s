@@ -5,7 +5,10 @@
 _start:
 #code starts here
 
-mov 	BX, offset boot_string
+mov     BX, 0x7C00                          # setup gdt_start
+add     BX, offset gdt_start
+mov     [setup_gdt_address], BX
+mov 	BX, offset boot_string              # print boot string
 call	print
                                             # load kernel from disk to 0x100000
                                             #TODO
@@ -15,6 +18,8 @@ lgdt    [gdt_descriptor]
 mov     EAX, CR0
 or      EAX, 0x1
 mov     CR0, EAX
+
+jmp     0x08:0x100000
 
 .code32
 
@@ -29,9 +34,10 @@ boot_string:
 .string "Bootloader is starting..."
 
 gdt_descriptor:
-.word gdt_end - gdt_start - 1
-.
-
+.word (offset gdt_end) - (offset gdt_start) - 1
+.word 0x0000
+setup_gdt_address:
+.word 0x0000
 
 gdt_start:
     NULL_Descriptor:
@@ -64,6 +70,5 @@ gdt_end:
 
 
 #00000011110100001001000000000000b
-0000b 0011110100001000b
 .fill 510-(.-_start)
 .word 0x55AA
