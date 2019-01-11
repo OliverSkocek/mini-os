@@ -19,9 +19,13 @@ mov     EAX, CR0
 or      EAX, 0x1
 mov     CR0, EAX
 
-jmp     0x08:0x100000
+mov     AX, 0x7C00
+add     AX, offset start32:
+jmp     0x08:[AX]
 
 .code32
+start32:
+
 
 #include files here
 
