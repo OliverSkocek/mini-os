@@ -1,14 +1,12 @@
 # Bootloader
-.intel_syntax noprefix
-.code16
-.global _start
-_start:
+[org 0x7C00]
+[bits 16]
 #code starts here
 
 mov     BX, 0x7C00                          # setup gdt_start
-add     BX, offset gdt_start
+add     BX, gdt_start
 mov     [setup_gdt_address], BX
-mov 	BX, offset boot_string              # print boot string
+mov 	BX, boot_string              # print boot string
 call	print
                                             # load kernel from disk to 0x100000
                                             #TODO
@@ -20,14 +18,16 @@ or      EAX, 0x1
 mov     CR0, EAX
 
 mov     AX, 0x7C00
-add     AX, offset start32:
-jmp     0x08:[AX]
+add     AX, start32
+jmp     0x08:AX
 
-.code32
-start32:
+[code 32]
+start32:                                    # Setup Stack
 
 
 #include files here
+%include "print.s"
+%include "copy.s"
 
 #end code
 end:
@@ -35,44 +35,44 @@ jmp	end
 
 #data goes here
 boot_string:
-.string "Bootloader is starting..."
+db "Bootloader is starting...", 0
 
 gdt_descriptor:
-.word (offset gdt_end) - (offset gdt_start) - 1
-.word 0x0000
+dw (offset gdt_end) - (offset gdt_start) - 1
+dw 0x0000
 setup_gdt_address:
-.word 0x0000
+dw 0x0000
 
 gdt_start:
     NULL_Descriptor:
-        .word 0x0000
-        .word 0x0000
-        .word 0x0000
-        .word 0x0000
+        dw 0x0000
+        dw 0x0000
+        dw 0x0000
+        dw 0x0000
     CODE:
-        .word 0011110100001000b
-        .word 0x0000
-        .byte 0x00
-        .byte 10011010b
-        .byte 11000000b
-        .byte 0x00
+        dw 0011110100001000b
+        dw 0x0000
+        db 0x00
+        db 10011010b
+        db 11000000b
+        db 0x00
     DATA:
-        .word 0011110100001000b
-        .word 1001000000000000b
-        .byte 11010000b
-        .byte 10010010b
-        .byte 11000000b
-        .byte 00000011b
+        dw 0011110100001000b
+        dw 1001000000000000b
+        db 11010000b
+        db 10010010b
+        db 11000000b
+        db 00000011b
     HEAP:
-        .word 0011110100001000b
-        .word 0010000000000000b
-        .byte 10100001b
-        .byte 10010010b
-        .byte 11000000b
-        .byte 00000111b
+        dw 0011110100001000b
+        dw 0010000000000000b
+        db 10100001b
+        db 10010010b
+        db 11000000b
+        db 00000111b
 gdt_end:
 
 
 #00000011110100001001000000000000b
-.fill 510-(.-_start)
-.word 0x55AA
+times 510-($-_start) db 0x00
+dw 0x55AA
