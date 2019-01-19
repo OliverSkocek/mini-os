@@ -34,12 +34,11 @@ start32:                                    ; Enter protected mode
 mov     AX, DATA                            ; Setup Stack
 mov     DS, AX
 mov     SS, AX
-mov     AX, CODE
-mov     CS, AX
-mov     AX, HEAP
 mov     ES, AX
 mov     FS, AX
 mov     GS, AX
+mov     AX, CODE
+mov     CS, AX
 
 mov     EBP, 0b0011110100000111
 mov     ESP, EBP
@@ -72,34 +71,25 @@ gdt_start:
         dw 0x0000
         dw 0x0000
         dw 0x0000
-    CODE:
-        dw 0b0011110100001000
+    SYSTEMCODE:
+        dw 0xFFFF
         dw 0x0000
         db 0x00
         db 0b10011010
-        db 0b11000000
+        db 0b11001111
         db 0x00
-    DATA:
-        dw 0b0011110100001000
-        dw 0b1001000000000000
-        db 0b11010000
+    SYSTEMDATA:
+        dw 0xFFFF
+        dw 0x0000
+        db 0x00
         db 0b10010010
-        db 0b11000000
-        db 0b00000011
-    HEAP:
-        dw 0b0011110100001000
-        dw 0b0010000000000000
-        db 0b10100001
-        db 0b10010010
-        db 0b11000000
-        db 0b00000111
+        db 0b11001111
+        db 0x00
 gdt_end:
 db "checked!", 0
 
 DATA_SEG equ DATA - gdt_start
 CODE_SEG equ CODE - gdt_start
-HEAP_SEG equ HEAP - gdt_start
 
-;00000011110100001001000000000000b
 times 510-($-start) db 0x00
 dw 0x55AA
