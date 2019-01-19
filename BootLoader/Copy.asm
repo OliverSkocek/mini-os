@@ -1,1 +1,1 @@
-; Copies BX bytes from address DS:
+; Copies BX bytes from address DS:BX
