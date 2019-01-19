@@ -6,4 +6,4 @@ This is purely educational (for me) and I use the following sources:
 
 https://arjunsreedharan.org/post/99370248137/kernels-201-lets-write-a-kernel-with-keyboard <br>
 http://3zanders.co.uk/2017/10/16/writing-a-bootloader2/ <br>
-os-dev.pdf by Nick Blundell
+https://www.cs.bham.ac.uk/~exr/lectures/opsys/10_11/lectures/os-dev.pdf <br>
