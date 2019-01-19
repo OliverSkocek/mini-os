@@ -41,7 +41,7 @@ mov     ES, AX
 mov     FS, AX
 mov     GS, AX
 
-mov     EBP, bx0011110100000111
+mov     EBP, 0b0011110100000111
 mov     ESP, EBP
 
 
