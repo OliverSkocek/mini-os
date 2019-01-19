@@ -9,10 +9,10 @@ if [ $EXTENSION = "asm" ]; then
 	echo "Writing to Floppy disk..."
 #	dd if="$FILENAME.bin" of=/dev/fd0i bs=512 count=1
     dd if="$FILENAME.bin" of=/dev/sdc bs=512 count=1
-	md5 "$FILENAME.bin"
+	md5sum "$FILENAME.bin"
 #	dd if=/dev/fd0i of="FLOPPY.img" bs=512 count=1
     dd if=/dev/sdc of="FLOPPY.img" bs=512 count=1
-	md5 "FLOPPY.img"
+	md5sum "FLOPPY.img"
 	echo "Done!"
 else
 	echo "Wrong Format!"
