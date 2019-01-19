@@ -1,12 +1,13 @@
-; Bootloader
+; Bootloader!,0
+;
 [org 0x7C00]
 [bits 16]
-#code starts here
+;code starts here
 start:
 mov     [BootDrive], DL
 
 mov 	BX, boot_string              ; print boot string
-call	print
+call	print16
 
 mov     BP, 0x7FFF                          ; setup stack
 mov     SP, BP
@@ -26,18 +27,18 @@ mov     EAX, CR0
 or      EAX, 0x1
 mov     CR0, EAX
 
-jmp     CODE:start32
+jmp     CODE_SEG:start32
 
 
-[code 32]
+[bits 32]
 start32:                                    ; Enter protected mode
-mov     AX, DATA                            ; Setup Stack
+mov     AX, DATA_SEG                            ; Setup Stack
 mov     DS, AX
 mov     SS, AX
 mov     ES, AX
 mov     FS, AX
 mov     GS, AX
-mov     AX, CODE
+mov     AX, CODE_SEG
 mov     CS, AX
 
 mov     EBP, 0b0011110100000111
@@ -47,8 +48,8 @@ mov     ESP, EBP
 
 
 ;include files here
-%include "print16.s"
-%include "CopyFromDisk16.s"
+%include "print16.asm"
+%include "CopyFromDisk16.asm"
 
 ;end code
 end:
@@ -58,11 +59,11 @@ jmp	end
 boot_string:
 db "Bootloader is starting...", 0
 BootDrive:
-bd 0x00
+db 0x00
 
 
 gdt_descriptor:
-dw (offset gdt_end) - (offset gdt_start) - 1
+dw gdt_end - gdt_start - 1
 dd gdt_start
 
 gdt_start:
@@ -88,8 +89,8 @@ gdt_start:
 gdt_end:
 db "checked!", 0
 
-DATA_SEG equ DATA - gdt_start
-CODE_SEG equ CODE - gdt_start
+DATA_SEG equ SYSTEMDATA - gdt_start
+CODE_SEG equ SYSTEMCODE - gdt_start
 
 times 510-($-start) db 0x00
 dw 0x55AA

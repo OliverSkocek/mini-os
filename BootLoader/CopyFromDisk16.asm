@@ -14,7 +14,7 @@ mov     CL, 0x02                    ; Start reading Sector 0x02
 int     0x13
 
 pop     DX
-cmp     DH; AL
+cmp     DH, AL
 jne     DiskError
 
 popa
