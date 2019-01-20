@@ -40,12 +40,12 @@ or      EAX, 0x1
 mov     CR0, EAX
 
 jmp     CODE_SEG:start32                    ; cleans cache and sets CS
-;mov     BX, switch32_message
-;call    print16
+
 
 ;include 16-bit files here
 %include "print16.asm"
 %include "CopyFromDisk16.asm"
+
 
 [bits 32]
 ;32-bit code starts here
@@ -61,11 +61,7 @@ mov     EBP, 0xFFFFFF
 mov     ESP, EBP
 
 ;mov     BX, switch_complete
-;call    print16
-
-
-;include 32-bit files here
-
+;call    print32
 
 ;end code
 end:
@@ -90,7 +86,7 @@ gdt_descriptor:
 dw gdt_end - gdt_start - 1
 dd gdt_start
 
-gdt_start:
+gdt_start:                                          ;TODO check for LITTLE vs. BIG endians errors
     NULL_Descriptor:
         dw 0x0000
         dw 0x0000
@@ -116,5 +112,5 @@ DATA_SEG equ SYSTEMDATA - gdt_start
 CODE_SEG equ SYSTEMCODE - gdt_start
 
 times 510-($-start) db 0x00
-dw 0x55AA
+dw 0xAA55
 

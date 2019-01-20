@@ -17,6 +17,7 @@ mov     EDX, 0x00                               ;set x and y coordinates of curr
 mov     [DS:0x504], EDX
 mov     EDX, 0x000F3347                         ;set initialization completed memory sign and color
 mov     [DS:0x500], EDX
+call    clear32
 jmp     display32_do
 
 write32:
@@ -51,18 +52,18 @@ jmp     display32_end
 
 shift32:
 pusha
-mov     BX, 2*CHARACTERS_PER_LINE
-mov     CX, 0x00
+mov     EBX, 2*CHARACTERS_PER_LINE
+mov     ECX, 0x00
 shift_loop:
-mov     DI, VGA_MEM
-add     DI, CX
-mov     SI, DI
-add     SI, BX
-mov     AX, [DS:SI]
-mov     [DS:DI], AX
-add     CX, 0x02
-mov     DI, 2*CHARACTERS_PER_LINE*(NUMBER_OF_LINES-1)
-cmp     CX, DI
+mov     EDI, VGA_MEM
+add     EDI, ECX
+mov     ESI, EDI
+add     ESI, EBX
+mov     AX, [DS:ESI]
+mov     [DS:EDI], AX
+add     ECX, 0x02
+mov     EDI, 2*CHARACTERS_PER_LINE*(NUMBER_OF_LINES-1)
+cmp     ECX, EDI
 jl      shift_loop
 popa
 dec     EAX
@@ -71,34 +72,18 @@ jmp     display32_end
 
 clear32:
 pusha
-mov     CX, 0x0000
-mov     AX, 0x0000
+mov     ECX, 0x0000
+mov     EAX, 0x0000
 clear_loop:
-mov     DI, VGA_MEM
-add     DI, CX
+mov     EDI, VGA_MEM
+add     EDI, ECX
 mov     [DS:DI], AX
-add     CX, 0x02
-mov     DI, 2*CHARACTERS_PER_LINE*(NUMBER_OF_LINES-1)
-cmp     CX, DI
+add     ECX, 0x02
+mov     EDI, 2*CHARACTERS_PER_LINE*(NUMBER_OF_LINES-1)
+cmp     ECX, EDI
 jle     clear_loop
 popa
-jmp     display32_end
-
-
-
-get_coordinate32:
-pusha
-mov     EBX, [DS:0x508]
-mov     EDI, 0x00
-mov     DI, BX
-shr     EBX, 16
-mov     EAX, CHARACTERS_PER_LINE
-mul     EDI
-add     EBX, EAX
-mov     [DS:0x510]
-popa
 ret
-
 
 
 display32_do:

@@ -1,6 +1,6 @@
-# Oliver's BIOS dependent print function
-# function prints string until it finds string terminus zero,
-# Address of first character in string will be found in BX
+; Oliver's BIOS dependent print function
+; function prints string until it finds string terminus zero,
+; Address of first character in string will be found in BX
 print16:
 
 pusha
