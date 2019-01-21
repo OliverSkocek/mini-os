@@ -31,7 +31,17 @@ call    CopyFromDisk16
 
 mov     BX, kernel_complete
 call    print16
-                                            ; TODO check if data loaded correctly
+
+mov     AX, [0x8000+512*16-1]               ; Check if copy was complete
+cmp     AX, 0x3347
+je      copy_good
+copy_bad:
+mov     BX, copy_bad_string
+call    print16
+jmp     end
+copy_good:
+mov     BX, copy_good_string
+call    print16
                                             ; setup 32 bit protected mode and switch
 cli
 lgdt    [gdt_descriptor]
@@ -65,7 +75,7 @@ mov     DI, 0x100000
 mov     CX, 512*16
 call    Copy8
 
-mov     AX, [DS:0x100000+512*16]                ; Check if copy was complete
+mov     AX, [DS:0x100000+512*16-1]                ; Check if copy was complete
 cmp     AX, 0x3347
 je      0x100000
 
@@ -87,6 +97,10 @@ switch32_message:
 db "Switching to protected mode:", 0
 switch_complete:
 db "Switch is complete", 0
+copy_good_string:
+db "Copy successful!", 0
+copy_bad_string:
+db "Copy failed!", 0
 BootDrive:
 db 0x00
 
@@ -121,5 +135,5 @@ DATA_SEG equ SYSTEMDATA - gdt_start
 CODE_SEG equ SYSTEMCODE - gdt_start
 
 times 510-($-start) db 0x00
-dw 0xAA55
+dw 0xAA55                                           ;TODO check if boot token correct
 
