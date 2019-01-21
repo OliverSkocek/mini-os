@@ -93,10 +93,10 @@ kernel_message:
 db "Kernel is being copied...", 0
 kernel_complete:
 db "Kernel copied!", 0
-switch32_message:
-db "Switching to protected mode:", 0
-switch_complete:
-db "Switch is complete", 0
+;switch32_message:
+;db "Switching to protected mode:", 0
+;switch_complete:
+;db "Switch is complete", 0
 copy_good_string:
 db "Copy successful!", 0
 copy_bad_string:
