@@ -60,6 +60,15 @@ mov     GS, AX
 mov     EBP, 0xFFFFFF
 mov     ESP, EBP
 
+mov     SI, 0x8000                          ; Copy kernel to 0x100000
+mov     DI, 0x100000
+mov     CX, 512*16
+call    Copy8
+
+mov     AX, [DS:0x100000+512*16]                ; Check if copy was complete
+cmp     AX, 0x3347
+je      0x100000
+
 ;mov     BX, switch_complete
 ;call    print32
 
