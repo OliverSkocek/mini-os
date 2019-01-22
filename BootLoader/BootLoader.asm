@@ -33,7 +33,7 @@ mov     BX, kernel_complete
 call    print16
                                             ; TODO check if data loaded correctly
                                             ; setup 32 bit protected mode and switch
-cli
+cli                                         ; turn off interrupts
 lgdt    [gdt_descriptor]
 mov     EAX, CR0
 or      EAX, 0x1
