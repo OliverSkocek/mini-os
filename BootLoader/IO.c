@@ -14,3 +14,18 @@ struct GDT_entry{
 	unsigned char flags;                            /*  8 bit */
 };
 
+struct GDT_Descriptor{
+    unsigned int size;
+    unsigned long address;
+
+};
+
+void load_GDT(struct GDT_entry[] GDT_instance)
+{
+struct GDT_Descriptor;
+
+GDT_Descriptor.size = sizeof(GDT_entry);
+GDT_Descriptor.address = GDT_entry;
+
+
+}
