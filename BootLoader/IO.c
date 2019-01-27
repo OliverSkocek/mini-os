@@ -30,14 +30,11 @@ if (GDT_entry_instance.limit > 0xFFFFFUL)
     }
 else
     {
-    GDT_entry_binary[0] = (0xFFFFUL & GDT_entry_instance.limit);
-    GDT_entry_binary[0] = GDT_entry_binary[0] | ((0x0000FFFFUL & GDT_entry_instance.base)<<16);
+    GDT_entry_binary[0] = (0x0000FFFFUL & GDT_entry_instance.limit)| ((0x0000FFFFUL & GDT_entry_instance.base)<<16);
 
-    GDT_entry_binary[1] = ((0x00FF0000UL & GDT_entry_instance.base)>>16);
-    GDT_entry_binary[1] = GDT_entry_binary[1] | (((long)GDT_entry_instance.access_byte)<<8);
-    GDT_entry_binary[1] = GDT_entry_binary[1] | (0xF0000UL & GDT_entry_instance.limit);
-    GDT_entry_binary[1] = GDT_entry_binary[1] | (((long)GDT_entry_instance.flags)<<20);
-    GDT_entry_binary[1] = GDT_entry_binary[1] | ((0xFF000000UL & GDT_entry_instance.base));
+    GDT_entry_binary[1] = ((0x00FF0000UL & GDT_entry_instance.base)>>16)| (((long)GDT_entry_instance.access_byte)<<8)
+                          |(0x000F0000UL & GDT_entry_instance.limit)|(((long)GDT_entry_instance.flags)<<20)
+                          |(0xFF000000UL & GDT_entry_instance.base);
     return GDT_entry_binary;
     }
 }
