@@ -141,5 +141,6 @@ CODE_SEG equ SYSTEMCODE - gdt_start
 times 510-($-start) db 0x00
 dw 0xAA55                                           ;TODO check if boot token correct
 db 0xFF
-
+mov 	BX, boot_string                     ; print boot string
+call	print16
 jmp end_of_code
