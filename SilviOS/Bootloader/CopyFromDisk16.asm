@@ -5,6 +5,11 @@ CopyFromDisk16:
 pusha
 push    DX
 
+reset:
+mov     AH, 0x00
+int     0x13
+jc      reset
+
 mov     AH, 0x02                    ; BIOS read sector function
 mov     AL, DH                      ; Read AH sectors from the start point
 mov     CH, 0x00                    ; Select Cylinder 0
@@ -15,7 +20,10 @@ int     0x13
 
 pop     DX
 cmp     DH, AL
-jne     DiskError
+jne     DiskError                   ; check for error code of interrupt
+mov     AH, [0x7E00]
+cmp     AH, 0xFF
+jne     DiskError                   ; check if 513 byte has the right value now
 
 popa
 ret

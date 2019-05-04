@@ -1,8 +1,8 @@
 struct GDT_entry{
 	unsigned long limit;                             /* 20 bit */
 	unsigned long base;                              /* 32 bit */
-	unsigned char access_byte;                      /*  8 bit */
-	unsigned char flags;                            /*  8 bit */
+	unsigned char access_byte;                       /*  8 bit */
+	unsigned char flags;                             /*  8 bit */
 };
 
 
@@ -48,4 +48,23 @@ for (i=0;i<=GDT_Descriptor[0];i++)
 
 
 
+}
+
+void memset(unsigned char* destination, unsigned char value, unsigned int length)
+{
+    for(int n=0; n<length; destination[n++]=value)
+    ;
+}
+
+void memcpy(unsigned char* source, unsigned char* destination, unsigned int length)
+{
+    for(int n=0; n<length; destination[n++]=source[n])
+    ;
+}
+
+int strlen(const char* string)
+{
+    for(int count=0;string[count]!=0;count++)
+    ;
+    return count;
 }

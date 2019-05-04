@@ -1,8 +1,9 @@
-; mini-os IO assembler routines
-
-load_ldt:
+; SilviOS IO assembler routines
+; Basic routines that can not be implemented in the c language
 
 load_gdt:
+mov     EDX, [ESP + 4]
+lgdt    [EDX]
 
 read_port:
 mov     EDX, [ESP + 4]

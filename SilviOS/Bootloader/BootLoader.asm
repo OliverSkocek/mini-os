@@ -5,7 +5,7 @@
 [bits 16]
 ;16-bit code starts here
 start:
-mov     [BootDrive], DL
+mov     [BootDrive], DL                     ;
 
 mov 	BX, boot_string                     ; print boot string
 call	print16
@@ -21,12 +21,14 @@ mov     SP, BP
 
 mov 	BX, kernel_message
 call    print16
-                                            ; load kernel from disk to 0x8000
-mov     BX, 0x0800
+
+load_second_stage:
+                                            ; load kernel from disk to 0x7E00
+mov     BX, 0x07E0
 mov     ES, BX
 mov     BX, 0x0000
 mov     DL, [BootDrive]
-mov     DH, 16                              ; Load 16 sectors
+mov     DH, 4                              ; Load 4 sector TODO replace  this an change CopyFromDisk16 such that whole disk is copied onto RAM
 call    CopyFromDisk16
 
 mov     BX, kernel_complete
@@ -38,11 +40,12 @@ je      copy_good
 copy_bad:
 mov     BX, copy_bad_string
 call    print16
-jmp     end
+jmp     end_of_code
 copy_good:
 mov     BX, copy_good_string
 call    print16
-                                            ; setup 32 bit protected mode and switch
+
+switch_to_32bit:                            ; setup 32 bit protected mode and switch
 cli                                         ; turn off interrupts
 lgdt    [gdt_descriptor]
 mov     EAX, CR0
@@ -70,20 +73,21 @@ mov     GS, AX
 mov     EBP, 0xFFFFFF
 mov     ESP, EBP
 
-mov     SI, 0x8000                          ; Copy kernel to 0x100000
-mov     DI, 0x100000
-mov     CX, 512*16
-call    Copy8
+jmp     [DS:0x7e01]
+;mov     SI, 0x8000                          ; Copy kernel to 0x100000
+;mov     DI, 0x100000
+;mov     CX, 512*16
+;call    Copy8
 
-mov     AX, [DS:0x100000+512*16-1]                ; Check if copy was complete
-cmp     AX, 0x3347
-je      0x100000
+;mov     AX, [DS:0x100000+512*16-1]                ; Check if copy was complete
+;cmp     AX, 0x3347
+;je      0x100000
 
 ;mov     BX, switch_complete
 ;call    print32
 
 ;end code
-end:
+end_of_code:
 jmp	    $
 
 ;data goes here
@@ -136,4 +140,6 @@ CODE_SEG equ SYSTEMCODE - gdt_start
 
 times 510-($-start) db 0x00
 dw 0xAA55                                           ;TODO check if boot token correct
+db 0xFF
 
+jmp end_of_code
