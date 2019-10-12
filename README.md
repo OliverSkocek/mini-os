@@ -7,3 +7,7 @@ This is purely educational (for me) and I use the following sources:
 https://arjunsreedharan.org/post/99370248137/kernels-201-lets-write-a-kernel-with-keyboard <br>
 http://3zanders.co.uk/2017/10/16/writing-a-bootloader2/ <br>
 https://www.cs.bham.ac.uk/~exr/lectures/opsys/10_11/lectures/os-dev.pdf <br>
+https://littleosbook.github.io/
+https://wiki.osdev.org
+http://www.osdever.net/bkerndev/Docs/idt.htm
+http://www.brokenthorn.com/Resources/OSDevIndex.html
