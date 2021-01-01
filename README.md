@@ -11,3 +11,4 @@ https://littleosbook.github.io/ <br>
 https://wiki.osdev.org <br>
 http://www.osdever.net/bkerndev/Docs/idt.htm <br>
 http://www.brokenthorn.com/Resources/OSDevIndex.html <br>
+https://www.phatcode.net/res/223/files/html/toc.html <br>
